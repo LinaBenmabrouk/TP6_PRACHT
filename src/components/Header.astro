@@ -1,0 +1,92 @@
+---
+import Fleche from '../../public/fleche_bas.svg';
+---
+
+<header class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+  <a href="/" class="text-lg font-semibold text-slate-950 hover:text-slate-600 sm:text-xl">
+    TP Observable Plot
+  </a>
+
+  <nav class="flex flex-wrap items-center justify-end gap-4" aria-label="Navigation principale">
+    <a href="/ancres" class="hover:text-slate-600">Ancres</a>
+    <a href="/tabs/" class="hover:text-slate-600">Tabs</a>
+    <a href="/iframe/" class="hover:text-slate-600">Iframe</a>
+    <details class="relative">
+      <summary class="flex cursor-pointer list-none items-center gap-1 hover:text-slate-600">
+        Voitures
+        <Fleche aria-hidden="true" class="h-3 w-3" />
+      </summary>
+      <div class="absolute left-0 top-full z-10 mt-1 grid min-w-max border border-slate-200 bg-white text-sm shadow-lg">
+        <a href="/cars/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Voitures simple</a>
+        <a href="/cars/cars-filter/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Filtre par année</a>
+        <a href="/cars/cars-multiple-filters/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Plusieurs filtres</a>
+      </div>
+    </details>
+
+    <details class="relative">
+      <summary class="flex cursor-pointer list-none items-center gap-1 hover:text-slate-600">
+        Penguins
+        <Fleche aria-hidden="true" class="h-3 w-3" />
+      </summary>
+      <div class="absolute left-0 top-full z-10 mt-1 grid min-w-max border border-slate-200 bg-white text-sm shadow-lg">
+        <a href="/penguins/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Penguins simple</a>
+        <a href="/penguins/penguin-filter/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Filtre par espèce</a>
+        <a href="/penguins/penguin-multiple-filters/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Plusieurs filtres</a>
+      </div>
+    </details>
+
+    <details class="relative">
+      <summary class="flex cursor-pointer list-none items-center gap-1 hover:text-slate-600">
+        Météo
+        <Fleche aria-hidden="true" class="h-3 w-3" />
+      </summary>
+      <div class="absolute left-0 top-full z-10 mt-1 grid min-w-max border border-slate-200 bg-white text-sm shadow-lg">
+        <a href="/weather/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Météo simple</a>
+        <a href="/weather/weather-filter/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Filtre par ville</a>
+        <a href="/weather/weather-multiple-filters/" class="whitespace-nowrap px-3 py-2 hover:bg-slate-100">Plusieurs filtres</a>
+      </div>
+    </details>
+
+    <label for="species" class="sr-only">Choisir une espèce</label>
+    <select
+      id="species"
+      class="cursor-pointer rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm outline-none transition hover:border-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+    >
+      <option value="">Choisir une espèce</option>
+      <option value="Adelie">Adelie</option>
+      <option value="Chinstrap">Chinstrap</option>
+      <option value="Gentoo">Gentoo</option>
+    </select>
+  </nav>
+</header>
+
+<script>
+  const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>("nav details"));
+
+  menus.forEach((menu) => {
+    menu.addEventListener("toggle", () => {
+      if (menu.open) {
+        menus.forEach((otherMenu) => {
+          if (otherMenu !== menu) {
+            otherMenu.open = false;
+          }
+        });
+      }
+    });
+  });
+
+  const speciesSelect = document.querySelector("#species") as HTMLSelectElement | null;
+  const currentSpecies = window.location.pathname.match(/^\/species\/([^/]+)\/?$/)?.[1];
+
+  if (speciesSelect && currentSpecies) {
+    speciesSelect.value = currentSpecies;
+  }
+
+  speciesSelect?.addEventListener("change", (event) => {
+    const select = event.currentTarget as HTMLSelectElement;
+
+    if (select.value) {
+      window.location.pathname = `/species/${select.value}/`;
+    }
+  });
+</script>
